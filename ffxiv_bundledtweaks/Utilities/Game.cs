@@ -122,7 +122,7 @@ public unsafe class Game
 
     public static bool OpenShop(ulong vendorInstanceId, uint shopId)
     {
-        if (Svc.Objects.TryGetFirst(o => o.BaseId == vendorInstanceId, out var vendor))
+        if (Svc.Objects.TryGetFirst(o => o.DataId == vendorInstanceId, out var vendor))
             return OpenShop(vendor.Struct(), shopId);
         else
         {
