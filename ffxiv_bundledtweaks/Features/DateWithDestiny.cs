@@ -138,28 +138,28 @@ public class DateWithDestiny : Tweak<DateWithDestinyConfiguration>
         DrawCommands();
 
         ImGuiX.DrawSection("Configuration");
-        ImGui.Checkbox("Yo-Kai Mode (Very Experimental)", ref yokaiMode);
-        ImGui.Checkbox("Prioritize targeting Forlorns", ref Config.PrioritizeForlorns);
-        ImGui.Checkbox("Prioritize Fates with EXP bonus", ref Config.PrioritizeBonusFates);
+        ImGui.Checkbox("妖怪手錶模式（高度實驗性）##Yo-Kai Mode", ref yokaiMode);
+        ImGui.Checkbox("優先鎖定迷失者##Prioritize targeting Forlorns", ref Config.PrioritizeForlorns);
+        ImGui.Checkbox("優先有經驗值加成的危命任務##Prioritize Fates with EXP bonus", ref Config.PrioritizeBonusFates);
         ImGui.Indent();
         using (var _ = ImRaii.Disabled(!Config.PrioritizeBonusFates))
         {
-            ImGui.Checkbox("Only with Twist of Fate", ref Config.BonusWhenTwist);
+            ImGui.Checkbox("僅在「命運之扭轉」狀態下##Only with Twist of Fate", ref Config.BonusWhenTwist);
         }
         ImGui.Unindent();
-        ImGui.Checkbox("Prioritize fates that have progress already (up to configured limit)", ref Config.PrioritizeStartedFates);
-        ImGui.Checkbox("Always close to melee range of target", ref Config.StayInMeleeRange);
-        ImGui.Checkbox("Full Auto Mode", ref Config.FullAuto);
+        ImGui.Checkbox("優先已有進度的危命任務（不超過設定上限）##Prioritize started FATEs", ref Config.PrioritizeStartedFates);
+        ImGui.Checkbox("保持在目標近戰範圍內##Stay in melee range", ref Config.StayInMeleeRange);
+        ImGui.Checkbox("全自動模式##Full Auto Mode", ref Config.FullAuto);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip($"All the below options will be treated as true if this is enabled.");
         ImGui.Indent();
         using (var _ = ImRaii.Disabled(Config.FullAuto))
         {
-            ImGui.Checkbox("Auto Mount", ref Config.AutoMount);
-            ImGui.Checkbox("Auto Fly", ref Config.AutoFly);
-            ImGui.Checkbox("Auto Sync", ref Config.AutoSync);
-            ImGui.Checkbox("Auto Target Mobs", ref Config.AutoTarget);
-            ImGui.Checkbox("Auto Move To Mobs", ref Config.AutoMoveToMobs);
-            ImGui.Checkbox("Path To Next Fate", ref Config.PathToFate);
+            ImGui.Checkbox("自動騎乘##Auto Mount", ref Config.AutoMount);
+            ImGui.Checkbox("自動飛行##Auto Fly", ref Config.AutoFly);
+            ImGui.Checkbox("自動等級同步##Auto Sync", ref Config.AutoSync);
+            ImGui.Checkbox("自動鎖定敵人##Auto Target Mobs", ref Config.AutoTarget);
+            ImGui.Checkbox("自動移動至敵人##Auto Move To Mobs", ref Config.AutoMoveToMobs);
+            ImGui.Checkbox("前往下一個危命任務##Path To Next Fate", ref Config.PathToFate);
         }
         ImGui.Unindent();
 
@@ -177,8 +177,8 @@ public class DateWithDestiny : Tweak<DateWithDestinyConfiguration>
         ImGuiX.ResetButton(ref Config.MaxProgress, 90);
 
         ImGuiX.DrawSection("Fate Window Options");
-        ImGui.Checkbox("Show Time Remaining", ref Config.ShowFateTimeRemaining);
-        ImGui.Checkbox("Show Bonus Indicator", ref Config.ShowFateBonusIndicator);
+        ImGui.Checkbox("顯示剩餘時間##Show Time Remaining", ref Config.ShowFateTimeRemaining);
+        ImGui.Checkbox("顯示加成標記##Show Bonus Indicator", ref Config.ShowFateBonusIndicator);
     }
 
     public override void Enable()

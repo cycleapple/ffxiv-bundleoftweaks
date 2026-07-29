@@ -16,7 +16,7 @@ public class StringListConfigAttribute : BaseConfigAttribute
         var value = fieldInfo.GetValue(config)!;
         var attr = fieldInfo.GetCustomAttribute<BaseConfigAttribute>();
 
-        ImGui.TextUnformatted(fieldInfo.Name.SplitWords());
+        ImGui.TextUnformatted(LocalizeFieldLabel(fieldInfo));
 
         if (ImGui.InputText("##Input", ref _tempInput, 150, ImGuiInputTextFlags.EnterReturnsTrue))
         {

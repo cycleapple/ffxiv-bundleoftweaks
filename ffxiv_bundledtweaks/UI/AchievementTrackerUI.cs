@@ -46,13 +46,13 @@ public unsafe class AchievementTrackerUI(AchievementTracker tweak) : Window($"Ac
         }
         var preview = selectedAchievement is null ? string.Empty : $"{selectedAchievement?.Name}";
 
-        ImGuiEx.TextV($"Select Achievement");
+        ImGuiEx.TextV("選擇成就");
         ImGui.SameLine(120f.Scale());
 
         ImGuiEx.SetNextItemFullWidth();
         using var combo = ImRaii.Combo("###AchievementSelect", preview);
         if (!combo) return;
-        ImGui.Text("Search");
+        ImGui.Text("搜尋");
         ImGui.SameLine();
         ImGui.InputText("###AchievementSearch", ref Search, 100);
 

@@ -16,7 +16,7 @@ public class ColorConfigAttribute : BaseConfigAttribute
         var value = (Vector4)fieldInfo.GetValue(config)!;
         var attr = fieldInfo.GetCustomAttribute<BaseConfigAttribute>();
 
-        ImGuiEx.TextV(fieldInfo.Name.SplitWords());
+        ImGuiEx.TextV(LocalizeFieldLabel(fieldInfo));
         ImGui.SameLine();
 
         var newColor = ImGuiComponents.ColorPickerWithPalette(1, $"##{fieldInfo.Name}", value, Flags);

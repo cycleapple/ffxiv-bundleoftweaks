@@ -16,7 +16,7 @@ public class FloatConfigAttribute : BaseConfigAttribute
         var value = (float)fieldInfo.GetValue(config)!;
         var attr = fieldInfo.GetCustomAttribute<BaseConfigAttribute>();
 
-        ImGui.TextUnformatted(fieldInfo.Name.SplitWords());
+        ImGui.TextUnformatted(LocalizeFieldLabel(fieldInfo));
 
         using var indent = ImGuiX.ConfigIndent();
 

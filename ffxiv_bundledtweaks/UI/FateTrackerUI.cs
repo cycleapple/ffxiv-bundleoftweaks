@@ -19,7 +19,7 @@ internal class FateTrackerUI(DateWithDestiny tweak) : Window($"Fate Tracker##{na
 
     public override void Draw()
     {
-        ImGui.TextUnformatted($"Status: {(_tweak.active ? "on" : "off")} (Yo-Kai: {(_tweak.Config.YokaiMode ? "on" : "off")})");
+        ImGui.TextUnformatted($"狀態：{(_tweak.active ? "開啟" : "關閉")}（妖怪手錶：{(_tweak.Config.YokaiMode ? "開啟" : "關閉")}）");
         if (ImGuiComponents.IconButton(!_tweak.active ? FontAwesomeIcon.Play : FontAwesomeIcon.Stop))
         {
             _tweak.active ^= true;

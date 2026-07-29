@@ -91,7 +91,7 @@ public unsafe class GlamourSetsTrackerUI : Window
         var agent = ItemFinderModule.Instance();
         if (agent is null)
         {
-            ImGui.Text("You are not logged in.");
+            ImGui.Text("尚未登入遊戲。");
             return;
         }
 
@@ -111,11 +111,11 @@ public unsafe class GlamourSetsTrackerUI : Window
         }
 
         var ownedSets = _glamourSets.Where(x => agent->GlamourDresserItemIds.Contains(x.ItemId)).ToList();
-        ImGui.Text($"Complete Sets: {ownedSets.Count} / {_glamourSets.Count(x => x.SetType != ESetType.Unobtainable || ownedSets.Contains(x))}");
-        ImGui.Text($"Space saved: {ownedSets.Sum(x => x.Items.Count - 1)} items");
+        ImGui.Text($"完整套裝：{ownedSets.Count} / {_glamourSets.Count(x => x.SetType != ESetType.Unobtainable || ownedSets.Contains(x))}");
+        ImGui.Text($"節省空間：{ownedSets.Sum(x => x.Items.Count - 1)} 個物品欄位");
 
         var missingOnly = _tweak.Config.ShowOnlyMissing;
-        if (ImGui.Checkbox("Show missing only", ref missingOnly))
+        if (ImGui.Checkbox("僅顯示未取得套裝##Show missing only", ref missingOnly))
             _tweak.Config.ShowOnlyMissing = missingOnly;
 
         ImGui.Separator();

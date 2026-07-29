@@ -16,7 +16,7 @@ public class BoolConfigAttribute : BaseConfigAttribute
             .FirstOrDefault(mi => mi.GetCustomAttribute<CommandHandlerAttribute>()?.ConfigFieldName == fieldInfo.Name);
         var cmdAttr = cmdMethod?.GetCustomAttribute<CommandHandlerAttribute>();
         var missingIpcs = Service.IPC.GetMissing(cmdMethod);
-        var label = cmdAttr?.Commands.FirstOrDefault() ?? (!attr?.Label.IsNullOrEmpty() ?? false ? attr!.Label : fieldInfo.Name.SplitWords());
+        var label = cmdAttr?.Commands.FirstOrDefault() ?? (!attr?.Label.IsNullOrEmpty() ?? false ? attr!.Label : LocalizeFieldLabel(fieldInfo));
 
         if (missingIpcs.Length > 0 && !value)
         {
@@ -50,7 +50,7 @@ public class BoolConfigAttribute : BaseConfigAttribute
         if (missingIpcs.Length > 0)
         {
             using var warningIndent = ImGuiX.ConfigIndent();
-            ImGuiEx.TextV(Colors.Grey2, $"Missing {missingIpcs.Length} of the required plugins for this command to work:");
+            ImGuiEx.TextV(Colors.Grey2, $"此指令缺少 {missingIpcs.Length} 個必要插件：");
             foreach (var entry in missingIpcs)
             {
                 ImGui.TextColoredWrapped(Colors.Grey2, $"{entry.Name}:");

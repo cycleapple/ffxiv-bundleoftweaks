@@ -18,7 +18,7 @@ public class IntConfigAttribute : BaseConfigAttribute
         var value = (int)fieldInfo.GetValue(config)!;
         var attr = fieldInfo.GetCustomAttribute<BaseConfigAttribute>();
 
-        ImGuiEx.TextV(fieldInfo.Name.SplitWords());
+        ImGuiEx.TextV(LocalizeFieldLabel(fieldInfo));
         if (SameLine) ImGui.SameLine();
 
         using var indent = ImGuiX.ConfigIndent(!SameLine);

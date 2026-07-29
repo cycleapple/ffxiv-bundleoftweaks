@@ -50,20 +50,20 @@ public class EnhancedDutyStartEnd : Tweak<EnhancedDutyStartEndConfiguration>
         ImGuiX.DrawSection("Duty Start Options");
 
         ImGui.InputText($"##{nameof(Config.StartMsg)}", ref Config.StartMsg, 50);
-        ImGui.TextColoredWrapped(Colors.Grey, "Sends a party chat message when the duty starts.");
+        ImGui.TextColoredWrapped(Colors.Grey, "副本開始時傳送小隊聊天訊息。");
 
         if (ImGui.InputText($"##AddPlayers", ref _name, 50, ImGuiInputTextFlags.EnterReturnsTrue))
             Config.Players.Add(_name);
-        ImGui.TextColoredWrapped(Colors.Grey, "Leave if specific players are not present.");
+        ImGui.TextColoredWrapped(Colors.Grey, "指定玩家不在場時離開副本。");
 
         if (Config.Players.Count > 0)
         {
             ImGuiX.DrawSection("Players to Check For");
-            if (ImGui.Checkbox("Check for All", ref Config.CheckForAll))
+            if (ImGui.Checkbox("確認所有指定玩家##Check for All", ref Config.CheckForAll))
                 if (Config.CheckForAll)
                     Config.CheckForAny = !Config.CheckForAll;
             ImGui.SameLine();
-            if (ImGui.Checkbox("Check for Any", ref Config.CheckForAny))
+            if (ImGui.Checkbox("確認任一指定玩家##Check for Any", ref Config.CheckForAny))
                 if (Config.CheckForAny)
                     Config.CheckForAll = !Config.CheckForAny;
         }
@@ -78,9 +78,9 @@ public class EnhancedDutyStartEnd : Tweak<EnhancedDutyStartEndConfiguration>
         ImGuiX.DrawSection("Duty End Options");
 
         ImGui.InputText($"##{nameof(Config.EndMsg)}", ref Config.EndMsg, 50);
-        ImGui.TextColoredWrapped(Colors.Grey, "Sends a party chat message when the duty ends.");
+        ImGui.TextColoredWrapped(Colors.Grey, "副本結束時傳送小隊聊天訊息。");
 
-        ImGui.Checkbox("Auto Leave##End", ref Config.AutoLeaveOnEnd);
+        ImGui.Checkbox("自動離開##End", ref Config.AutoLeaveOnEnd);
         if (Config.AutoLeaveOnEnd)
             ImGui.SliderInt("Leave after (s)", ref Config.TimeToWait, 0, 100);
     }

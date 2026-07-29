@@ -18,7 +18,7 @@ public class EnumConfigAttribute : BaseConfigAttribute
 
         if (!NoLabel)
         {
-            ImGui.TextUnformatted(fieldInfo.Name.SplitWords());
+            ImGui.TextUnformatted(LocalizeFieldLabel(fieldInfo));
         }
 
         using var indent = ImGuiX.ConfigIndent(!NoLabel);

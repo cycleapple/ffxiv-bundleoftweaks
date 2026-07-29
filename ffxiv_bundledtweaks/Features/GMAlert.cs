@@ -42,9 +42,9 @@ public class GMAlert : Tweak<GMAlertConfiguration>
     {
         ImGuiX.DrawSection("Upon GM Appearance");
 
-        ImGui.Checkbox("Send Toast Alert", ref Config.Toast);
-        ImGui.Checkbox("Send Chat Alert", ref Config.ChatMessage);
-        ImGui.Checkbox("Send Sound Alert", ref Config.Sound);
+        ImGui.Checkbox("顯示彈出警報##Send Toast Alert", ref Config.Toast);
+        ImGui.Checkbox("顯示聊天警報##Send Chat Alert", ref Config.ChatMessage);
+        ImGui.Checkbox("播放音效警報##Send Sound Alert", ref Config.Sound);
         if (Config.Sound)
         {
             ImGui.SameLine();
@@ -67,9 +67,9 @@ public class GMAlert : Tweak<GMAlertConfiguration>
             ImGui.Unindent();
         }
 
-        ImGui.Checkbox("Kill Game", ref Config.KillGame);
+        ImGui.Checkbox("關閉遊戲##Kill Game", ref Config.KillGame);
 
-        ImGui.TextColoredWrapped(Colors.Gold, "Execute Commands");
+        ImGui.TextColoredWrapped(Colors.Gold, "執行指令");
         if (ImGui.InputText($"##Commands", ref _cmd, 50, ImGuiInputTextFlags.EnterReturnsTrue))
             Config.Commands.Add(_cmd.StartsWith('/') ? _cmd : $"/{_cmd}");
 

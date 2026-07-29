@@ -128,22 +128,22 @@ public class HuntRelayHelper : Tweak<HuntRelayHelperConfiguration>
 
         ImGuiX.DrawSection("Configuration");
 
-        ImGui.Checkbox("Don't repeat relays", ref Config.DontRepeatRelays);
+        ImGui.Checkbox("不要重複轉發##Don't repeat relays", ref Config.DontRepeatRelays);
         ImGuiComponents.HelpMarker("Don't send relays to the channel in which you clicked the relay payload.");
 
         //ImGui.Checkbox("Override minion flags", ref Config.OverrideMinionFlag);
         //ImGuiComponents.HelpMarker("Override minion relay flags with the location of the SS Rank");
 
-        ImGui.Checkbox("Allow partial world matching", ref Config.AllowPartialWorldMatches);
+        ImGui.Checkbox("允許部分比對世界名稱##Allow partial world matching", ref Config.AllowPartialWorldMatches);
         ImGuiComponents.HelpMarker("This will allow matching shorthands of worlds (e.g. \"behe\" -> Behemoth) but may result in false positives.");
 
-        ImGui.Checkbox("Remove <world> tags for Novice Network relays", ref Config.RemoveWorldFromNNCallouts);
+        ImGui.Checkbox("轉發至新人頻道時移除 <world> 標籤##Remove world tags", ref Config.RemoveWorldFromNNCallouts);
         ImGuiComponents.HelpMarker("Removes the <world> tag from your relays and any non-whitespace characters surrounding it, then trims any excess whitespace before sending to Novice Network.");
 
-        ImGui.Checkbox("Only send local hunts to local channels", ref Config.OnlySendLocalHuntsToLocalChannels);
+        ImGui.Checkbox("僅將本地狩獵轉發至本地頻道##Only send local hunts", ref Config.OnlySendLocalHuntsToLocalChannels);
         ImGuiComponents.HelpMarker("If a hunt is detected as being off your home world, it will only be relayed to non-local channels.");
 
-        ImGui.Checkbox("Assume blank worlds are local", ref Config.AssumeBlankWorldsAreLocal);
+        ImGui.Checkbox("將未標示世界視為本地##Assume blank worlds are local", ref Config.AssumeBlankWorldsAreLocal);
         ImGuiComponents.HelpMarker("If the world is failed to be detected, assume it's meant for the local world.");
 
         ImGui.Indent();
@@ -157,7 +157,7 @@ public class HuntRelayHelper : Tweak<HuntRelayHelperConfiguration>
         ImGui.Unindent();
 
 #if DEBUG
-        ImGui.Checkbox("Dry run", ref Config.DryRun);
+        ImGui.Checkbox("測試模式##Dry run", ref Config.DryRun);
         ImGuiComponents.HelpMarker("Enabling this will print the messages to chat without actually sending them to the server. This is just for testing.");
 #endif
 
@@ -170,14 +170,14 @@ public class HuntRelayHelper : Tweak<HuntRelayHelperConfiguration>
         {
             ImGui.TextUnformatted($"{t.Value.RelayType.ToString().SplitWords()}");
             ImGui.Indent();
-            ImGuiEx.TextV("Format: ");
+            ImGuiEx.TextV("格式：");
             ImGui.SameLine();
             var tmpF = Config.Types[t.Index].TypeFormat;
             if (ImGui.InputText($"##{t.Value.RelayType}{nameof(t.Value.TypeFormat)}", ref tmpF, 64))
                 Config.Types[t.Index] = (t.Value.RelayType, tmpF, t.Value.TypeHeuristics);
             ImGuiComponents.HelpMarker("This is what will be sent in chat to replace the <type> tag.");
 
-            ImGuiEx.TextV("Heuristics: ");
+            ImGuiEx.TextV("判定條件：");
             ImGui.SameLine();
             var tmpH = Config.Types[t.Index].TypeHeuristics;
             if (ImGui.InputText($"##{t.Value.RelayType}{nameof(t.Value.TypeHeuristics)}", ref tmpH, 128))
