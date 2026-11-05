@@ -1,4 +1,4 @@
-﻿using ECommons.ExcelServices;
+using ECommons.ExcelServices;
 using ECommons.UIHelpers.AddonMasterImplementations;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using Lumina.Excel.Sheets;
@@ -15,9 +15,9 @@ public sealed class BuyCeruleumTanks : CommonTasks
     {
         await GoToWorkshop();
         await WaitUntil(Game.IsTerritoryLoaded, "WaitingForTerritoryToLoad");
-        var npc = Game.GetNPCInfo(MammetVoyagerENpcId, Player.Territory, CeruleumTankId);
-        ErrorIf(npc == null, $"Failed to find NPC {MammetVoyagerENpcId} in {Player.Territory}");
-        ErrorIf(npc!.ShopId == 0, $"Failed to find shop for NPC {MammetVoyagerENpcId} in {Player.Territory}");
+        var npc = Game.GetNPCInfo(MammetVoyagerENpcId, Player.Territory.RowId, CeruleumTankId);
+        ErrorIf(npc == null, $"Failed to find NPC {MammetVoyagerENpcId} in {Player.Territory.RowId}");
+        ErrorIf(npc!.ShopId == 0, $"Failed to find shop for NPC {MammetVoyagerENpcId} in {Player.Territory.RowId}");
 
         Status = $"Moving to {npc.Location}";
         await MoveToDirectly(npc.Location, 0.5f);
@@ -27,10 +27,10 @@ public sealed class BuyCeruleumTanks : CommonTasks
     private async Task GoToWorkshop()
     {
         using var scope = BeginScope("GoToWorkshop");
-        static bool PlayerInWorkshop() => GetRow<TerritoryType>(Player.Territory) is { } t && t.BGM.RowId == 328;
+        static bool PlayerInWorkshop() => GetRow<TerritoryType>(Player.Territory.RowId) is { } t && t.BGM.RowId == 328;
         if (PlayerInWorkshop()) return; // already there
 
-        if (Player.TerritoryIntendedUse == TerritoryIntendedUseEnum.Housing_Instances)
+        if ((ECommons.ExcelServices.TerritoryIntendedUseEnum)Player.TerritoryIntendedUse.RowId == TerritoryIntendedUseEnum.Housing_Instances)
         {
             await EnterWorkshop();
             return;
@@ -42,7 +42,7 @@ public sealed class BuyCeruleumTanks : CommonTasks
         if (EstateHallDoor is { } door)
         {
             await MoveTo(door.Position, MovementConfig.InteractRange);
-            await InteractWith(door, () => Player.TerritoryIntendedUse == TerritoryIntendedUseEnum.Housing_Instances, null, UiSkipOptions.YesNo);
+            await InteractWith(door, () => (ECommons.ExcelServices.TerritoryIntendedUseEnum)Player.TerritoryIntendedUse.RowId == TerritoryIntendedUseEnum.Housing_Instances, null, UiSkipOptions.YesNo);
             await WaitWhile(() => !Game.IsTerritoryLoaded(), "WaitingForTerritoryToLoad");
             await EnterWorkshop();
         }
@@ -53,11 +53,11 @@ public sealed class BuyCeruleumTanks : CommonTasks
     private async Task EnterWorkshop()
     {
         using var scope = BeginScope("EnterWorkshop");
-        ErrorIf(Player.TerritoryIntendedUse != TerritoryIntendedUseEnum.Housing_Instances, "Not in a house");
+        ErrorIf((ECommons.ExcelServices.TerritoryIntendedUseEnum)Player.TerritoryIntendedUse.RowId != TerritoryIntendedUseEnum.Housing_Instances, "Not in a house");
         if (WorkshopDoor is { } door)
         {
             await MoveTo(door.Position, MovementConfig.InteractRange);
-            await InteractWith(door, () => GetRow<TerritoryType>(Player.Territory) is { BGM.RowId: 328 }, 0);
+            await InteractWith(door, () => GetRow<TerritoryType>(Player.Territory.RowId) is { BGM.RowId: 328 }, 0);
             await WaitUntil(Game.IsTerritoryLoaded, "WaitingForTerritoryToLoad");
         }
         else

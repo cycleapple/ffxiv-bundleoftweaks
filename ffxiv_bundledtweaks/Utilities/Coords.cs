@@ -47,14 +47,14 @@ public static class Coords
         var level = a.Level[0].ValueNullable;
         if (level != null)
             return new(level.Value.X, level.Value.Y, level.Value.Z);
-        var marker = FindRow<MapMarker>(m => m.DataType == 3 && m.DataKey.RowId == a.RowId)
-            ?? FindRow<MapMarker>(m => m.DataType == 4 && m.DataKey.RowId == a.AethernetName.RowId)!;
+        var marker = Svc.Data.GetSubrowExcelSheet<MapMarker>()!.SelectMany(group => group).Where(m => m.DataType == 3 && m.DataKey.RowId == a.RowId).Select(m => (MapMarker?)m).FirstOrDefault()
+            ?? Svc.Data.GetSubrowExcelSheet<MapMarker>()!.SelectMany(group => group).Where(m => m.DataType == 4 && m.DataKey.RowId == a.AethernetName.RowId).Select(m => (MapMarker?)m).FirstOrDefault()!;
         return PixelCoordsToWorldCoords(marker.Value.X, marker.Value.Y, a.Territory.Value.Map.RowId);
     }
 
     public static bool IsTeleportingFaster(Vector3 dest)
     {
-        if (FindClosestAetheryte(Player.Territory, dest, false) is not { } aetheryteId) return false;
+        if (FindClosestAetheryte(Player.Territory.RowId, dest, false) is not { } aetheryteId) return false;
         var aetherytePos = AetherytePosition(aetheryteId);
         Svc.Log.Info($"DistFromAetheryte: {(dest - aetherytePos).Length()}, DistFromPlayer: {(dest - Player.Position).Length()}");
         return (dest - aetherytePos).Length() + 300 < (dest - Player.Position).Length(); // 300 is roughly the distance you can travel in the time it takes to teleport and remount

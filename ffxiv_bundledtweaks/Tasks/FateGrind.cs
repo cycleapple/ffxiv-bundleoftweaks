@@ -1,4 +1,4 @@
-﻿using ComplexTweaks.Features;
+using ComplexTweaks.Features;
 using Dalamud.Game.ClientState.Fates;
 using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -32,7 +32,7 @@ public sealed class FateGrind(DateWithDestinyConfiguration config) : CommonTasks
     private unsafe float ChocoboTimeLeft => UIState.Instance()->Buddy.CompanionInfo.TimeLeft;
     private bool CanSummonChocobo
         => !Player.IsBusy
-        && Player.TerritoryIntendedUse == ECommons.ExcelServices.TerritoryIntendedUseEnum.Open_World
+        && (ECommons.ExcelServices.TerritoryIntendedUseEnum)Player.TerritoryIntendedUse.RowId == ECommons.ExcelServices.TerritoryIntendedUseEnum.Open_World
         && Inventory.HasItem(ChocoboSummonItemId)
         && !Game.IsActionInUse(ActionType.Item, ChocoboSummonItemId);
 
@@ -88,9 +88,9 @@ public sealed class FateGrind(DateWithDestinyConfiguration config) : CommonTasks
     private async Task ResurrectAndReturn()
     {
         using var scope = BeginScope($"{nameof(ResurrectAndReturn)}");
-        (var lastZone, var lastPos) = (Player.Territory, Player.Position);
+        (var lastZone, var lastPos) = (Player.Territory.RowId, Player.Position);
         Service.Memory.ExecuteCommand?.Invoke((int)ExecuteCommandFlag.Revive, 8); // TODO: it's either 8 or 5 depending on what GameMain.field_4095 is
-        await WaitUntilTerritory(Player.HomeAetheryteTerritory);
+        await WaitUntilTerritory(Player.HomeAetheryteTerritory.RowId);
         await TeleportTo(lastZone, lastPos);
     }
 
@@ -240,7 +240,7 @@ public sealed class FateGrind(DateWithDestinyConfiguration config) : CommonTasks
         var agent = AgentFateProgress.Instance();
         if (agent == null) return null;
         // prioritise zones in the same expac as current area
-        var currentTabIndex = Array.FindIndex(agent->Tabs.ToArray(), tab => tab.Zones.ToArray().Any(zone => Player.Territory == zone.TerritoryTypeId));
+        var currentTabIndex = Array.FindIndex(agent->Tabs.ToArray(), tab => tab.Zones.ToArray().Any(zone => Player.Territory.RowId == zone.TerritoryTypeId));
 
         if (currentTabIndex != -1 && currentTabIndex < agent->Tabs.Length - 1)
         {
@@ -258,7 +258,7 @@ public sealed class FateGrind(DateWithDestinyConfiguration config) : CommonTasks
 
     private uint GetRandomSameExpacZone()
     {
-        var rows = FindRows<TerritoryType>(x => x.ExVersion.RowId == GetRow<TerritoryType>(Player.Territory)!.Value.ExVersion.RowId);
+        var rows = FindRows<TerritoryType>(x => x.ExVersion.RowId == GetRow<TerritoryType>(Player.Territory.RowId)!.Value.ExVersion.RowId);
         return rows[new Random().Next(rows.Length)].RowId;
     }
 

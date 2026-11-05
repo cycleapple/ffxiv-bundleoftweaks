@@ -1,4 +1,4 @@
-﻿using ECommons.GameFunctions;
+using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
@@ -370,7 +370,7 @@ public unsafe class Game
     public static bool IsCastingTeleport()
     {
         var info = Player.Character->GetCastInfo();
-        return info is not null && info->IsCasting && info->ActionType == ActionType.Action && info->ActionId == 5;
+        return info is not null && info->IsCasting && info->ActionType == (byte)ActionType.Action && info->ActionId == 5;
     }
 
     public static bool IsAdventureComplete(uint rowId) => PlayerState.Instance()->IsAdventureComplete(rowId);

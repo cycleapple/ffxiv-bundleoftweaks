@@ -1,4 +1,4 @@
-﻿using ECommons.Automation;
+using ECommons.Automation;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
@@ -88,8 +88,9 @@ public static unsafe class PlayerEx
         module->AfkTimer = 0;
         module->ContentInputTimer = 0;
         module->InputTimer = 0;
-        module->Unk1C = 0;
-        if (Player.OnlineStatus == 17) // away from keyboard
+
+        // API14 follows upstream: reset the three public input timers only.
+        if (Player.OnlineStatus.RowId == 17) // away from keyboard
             Chat.SendMessage("/afk off"); // TODO: find a better way
     }
 

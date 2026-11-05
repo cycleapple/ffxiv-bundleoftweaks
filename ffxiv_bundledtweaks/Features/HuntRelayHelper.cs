@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.Text;
+using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Interface.Components;
@@ -231,9 +231,9 @@ public class HuntRelayHelper : Tweak<HuntRelayHelperConfiguration>
     {
         var payload = link.Payloads.OfType<RawPayload>().Select(RelayPayload.Parse).FirstOrDefault(x => x != default);
         if (payload == default) { Error($"Failed to parse {nameof(RelayPayload)}"); return; }
-        if (Player.TerritoryIntendedUse is TerritoryIntendedUseEnum.Crystalline_Conflict or TerritoryIntendedUseEnum.Crystalline_Conflict_2 or TerritoryIntendedUseEnum.Deep_Dungeon)
+        if ((ECommons.ExcelServices.TerritoryIntendedUseEnum)Player.TerritoryIntendedUse.RowId is TerritoryIntendedUseEnum.Crystalline_Conflict or TerritoryIntendedUseEnum.Crystalline_Conflict_2 or TerritoryIntendedUseEnum.Deep_Dungeon)
         {
-            Log($"Relay link ignored. Player in territory {Player.Territory} ({Player.TerritoryIntendedUse}) where chat is not permitted.");
+            Log($"Relay link ignored. Player in territory {Player.Territory.RowId} ({(ECommons.ExcelServices.TerritoryIntendedUseEnum)Player.TerritoryIntendedUse.RowId}) where chat is not permitted.");
             return;
         }
         if (payload == LastRelay)
@@ -248,8 +248,8 @@ public class HuntRelayHelper : Tweak<HuntRelayHelperConfiguration>
         {
             var channelName = channel.GetAttribute<XivChatTypeInfoAttribute>()?.FancyName ?? throw new Exception($"Channel has no {nameof(XivChatTypeInfoAttribute)}");
             if (Config.DontRepeatRelays && payload.OriginChannel == ((uint)channel)) continue; // don't send to the channel that relay was clicked from
-            if (channelName.StartsWith("Linkshell") && Player.CurrentWorld != Player.HomeWorld) continue; // don't send to linkshells when off homeworld
-            if (Config.OnlySendLocalHuntsToLocalChannels && islocal && !channelName.StartsWith("Novice") && Player.HomeWorldId != payload.World.RowId) continue; // don't send to non-novice local channels when off homeworld
+            if (channelName.StartsWith("Linkshell") && Player.CurrentWorld.RowId != Player.HomeWorld.RowId) continue; // don't send to linkshells when off homeworld
+            if (Config.OnlySendLocalHuntsToLocalChannels && islocal && !channelName.StartsWith("Novice") && Player.HomeWorld.RowId != payload.World.RowId) continue; // don't send to non-novice local channels when off homeworld
             if (channelName.StartsWith("Novice") && Player.Object.CurrentWorld.Value.RowId != payload.World.RowId) continue; // don't send offworld relays to NN
             if (channelName.StartsWith("Novice") && InfoProxyNoviceNetwork.Instance()->Flags != 1) continue; // 1 = joined
 
@@ -361,7 +361,7 @@ public class HuntRelayHelper : Tweak<HuntRelayHelperConfiguration>
         World? partial = null;
         if (Config.AllowPartialWorldMatches)
             foreach (var word in RemoveConflicts(text).Split(' ').Where(t => !ECommons.GenericHelpers.IsNullOrEmpty(t) && t.Length > 2))
-                partial ??= FindRow<World>(x => x.IsPublic && x.DataCenter.Value.Name == Player.CurrentDataCenter && x.Name.ExtractText().Contains(RemoveNonAlphaNumeric(word), StringComparison.OrdinalIgnoreCase));
+                partial ??= FindRow<World>(x => x.IsPublic && x.DataCenter.RowId == Player.CurrentDataCenter.RowId && x.Name.ExtractText().Contains(RemoveNonAlphaNumeric(word), StringComparison.OrdinalIgnoreCase));
 
         return (partial ?? FindRow<World>(x => x.IsPublic && RemoveConflicts(text).Contains(x.Name.ExtractText(), StringComparison.OrdinalIgnoreCase)) ?? null, heuristicInstance != 0 ? (uint)heuristicInstance : (uint)mapInstance, (uint)relayType);
     }

@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.Text;
+using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 using ECommons.EzHookManager;
@@ -178,7 +178,7 @@ public class AutoInvite : Tweak<AutoInviteConfiguration>
     }
 
     private bool InInvitableInstance()
-        => Svc.Condition[ConditionFlag.BoundByDuty56] && GetRow<TerritoryType>(Player.Territory)?.TerritoryIntendedUse.RowId is 41 or 47 or 48 or 52 or 53 or 61;
+        => Svc.Condition[ConditionFlag.BoundByDuty56] && GetRow<TerritoryType>(Player.Territory.RowId)?.TerritoryIntendedUse.RowId is 41 or 47 or 48 or 52 or 53 or 61;
 
     private byte[] ToTerminatedBytes(string s)
     {

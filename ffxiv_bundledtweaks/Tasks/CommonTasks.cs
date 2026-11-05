@@ -1,4 +1,4 @@
-﻿using ComplexTweaks.Utilities.Movement;
+using ComplexTweaks.Utilities.Movement;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.Sheets;
 using System.Threading.Tasks;
@@ -74,7 +74,7 @@ public abstract class CommonTasks : AutoTask
         if (Coords.IsTeleportingFaster(dest))
         {
             Log("Teleporting faster");
-            await TeleportTo(Player.Territory, dest, allowSameZoneTeleport: true);
+            await TeleportTo(Player.Territory.RowId, dest, allowSameZoneTeleport: true);
         }
 
         if (config.Movement.HasFlag(MovementOptions.Mount) || config.Movement.HasFlag(MovementOptions.Fly))
@@ -126,13 +126,13 @@ public abstract class CommonTasks : AutoTask
     protected async Task TeleportTo(uint territoryId, Vector3 destination, bool allowSameZoneTeleport = false)
     {
         using var scope = BeginScope("Teleport");
-        if (!allowSameZoneTeleport && Player.Territory == territoryId)
+        if (!allowSameZoneTeleport && Player.Territory.RowId == territoryId)
             return; // already in correct zone
 
         var closestAetheryteId = Coords.FindClosestAetheryte(territoryId, destination) ?? 0;
         var teleportAetheryteId = Coords.FindPrimaryAetheryte(closestAetheryteId);
         ErrorIf(teleportAetheryteId == 0, $"Failed to find aetheryte in [{territoryId}] {GetRow<TerritoryType>(territoryId)?.PlaceName.Value.Name}");
-        if (GetRow<Aetheryte>(teleportAetheryteId) is { Territory.RowId: var destinationId, PlaceName.Value.Name: var destinationName } && Player.Territory != destinationId)
+        if (GetRow<Aetheryte>(teleportAetheryteId) is { Territory.RowId: var destinationId, PlaceName.Value.Name: var destinationName } && Player.Territory.RowId != destinationId)
         {
             Status = $"Teleporting to {destinationName}";
             ErrorIf(!Coords.ExecuteTeleport(teleportAetheryteId), $"Failed to teleport to {teleportAetheryteId}");
@@ -148,7 +148,7 @@ public abstract class CommonTasks : AutoTask
             await WaitUntilSkipping(() => Game.AddonActive("SelectString"), "WaitSelectAethernet", UiSkipOptions.Talk);
             Game.TeleportToAethernet(teleportAetheryteId, closestAetheryteId);
             await WaitUntil(() => Player.IsBusy, "TeleportStart"); // TODO: something better
-            await WaitUntil(() => Player.Territory == territoryId && Game.IsTerritoryLoaded() && Player.Interactable, "TeleportFinish");
+            await WaitUntil(() => Player.Territory.RowId == territoryId && Game.IsTerritoryLoaded() && Player.Interactable, "TeleportFinish");
         }
 
         if (territoryId == 886)
@@ -164,7 +164,7 @@ public abstract class CommonTasks : AutoTask
         }
 
         // I think this check gives more problems than it solves
-        WarningIf(Player.Territory != territoryId, $"Failed to teleport to expected zone (exp: {territoryId}, act: {Player.Territory})");
+        WarningIf(Player.Territory.RowId != territoryId, $"Failed to teleport to expected zone (exp: {territoryId}, act: {Player.Territory.RowId})");
     }
 
     protected async Task Mount()
@@ -223,7 +223,7 @@ public abstract class CommonTasks : AutoTask
     protected async Task WaitUntilTerritory(uint territoryId)
     {
         using var scope = BeginScope("WaitUntilTerritory");
-        await WaitUntil(() => Player.Territory == territoryId && Game.IsTerritoryLoaded() && Player.Interactable, "WaitingForTerritory");
+        await WaitUntil(() => Player.Territory.RowId == territoryId && Game.IsTerritoryLoaded() && Player.Interactable, "WaitingForTerritory");
     }
 
     protected async Task<(uint, uint)> GetAchievementProgress(uint achievementId, string scopeName)

@@ -1,4 +1,4 @@
-﻿using ComplexTweaks.Features;
+using ComplexTweaks.Features;
 using Dalamud.Game.ClientState.Objects.Types;
 using ECommons.Automation;
 using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
@@ -36,10 +36,10 @@ public sealed class KillFlag(string world) : CommonTasks
 
     private async Task HandleWorldTravel()
     {
-        if (C.EnabledTweaks.Contains(nameof(InstantReturn)) && Player.Territory != Player.HomeAetheryteTerritory)
+        if (C.EnabledTweaks.Contains(nameof(InstantReturn)) && Player.Territory.RowId != Player.HomeAetheryteTerritory.RowId)
         {
             Chat.SendMessage("/return");
-            await WaitUntilTerritory(Player.HomeAetheryteTerritory);
+            await WaitUntilTerritory(Player.HomeAetheryteTerritory.RowId);
         }
         Service.Lifestream.ExecuteCommand(world);
         await WaitUntilThenFalse(() => Service.Lifestream.IsBusy(), "LifestreamWaitForFinish");

@@ -1,4 +1,4 @@
-﻿using ComplexTweaks.Tasks;
+using ComplexTweaks.Tasks;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -128,7 +128,7 @@ public partial class Commands : Tweak<CommandsConfiguration>
         var agent = ActionManager.Instance();
         if (agent == null) return;
 
-        agent->UseAction(itemId >= 2_000_000 ? ActionType.KeyItem : ActionType.Item, itemId, extraParam: 65535);
+        agent->UseAction(itemId >= 2_000_000 ? ActionType.EventItem : ActionType.Item, itemId, extraParam: 65535);
     }
     #endregion
 

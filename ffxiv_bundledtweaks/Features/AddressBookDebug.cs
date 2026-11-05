@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface;
+using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using ECommons.ImGuiMethods;
 using Dalamud.Bindings.ImGui;
@@ -21,10 +21,10 @@ public class AddressBookDebug : Tweak<AddresBookDebugConfiguration>
     {
         if (!Player.Available || Player.IsInPvP) return;
         if (ImGui.InputText($"##NewLocation", ref _name, 50, ImGuiInputTextFlags.EnterReturnsTrue))
-            Config.Locations.Add((_name, Player.Territory, PlayerEx.Position));
+            Config.Locations.Add((_name, Player.Territory.RowId, PlayerEx.Position));
         ImGuiX.DrawSection("Locations in Zone");
 
-        var locs = Config.Locations.Where(x => x.Territory == Player.Territory);
+        var locs = Config.Locations.Where(x => x.Territory == Player.Territory.RowId);
         foreach (var loc in locs)
         {
             ImGuiEx.TextV(EzColor.White, $"{loc.Name}: {loc.Position}");

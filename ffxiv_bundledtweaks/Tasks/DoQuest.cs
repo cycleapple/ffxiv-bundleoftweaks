@@ -1,4 +1,4 @@
-﻿using Lumina.Excel;
+using Lumina.Excel;
 using Lumina.Excel.Sheets;
 using System.Threading.Tasks;
 
@@ -16,7 +16,7 @@ public sealed class DoQuest(Quest row) : CommonTasks
     {
         using var scope = BeginScope("MoveToLevelLocation");
         var destination = row.Value.ToVector3();
-        if (Player.Territory != row.Value.Territory.RowId)
+        if (Player.Territory.RowId != row.Value.Territory.RowId)
             await TeleportTo(row.Value.Territory.RowId, destination);
 
         await MoveTo(destination, MovementConfig.InteractRange);

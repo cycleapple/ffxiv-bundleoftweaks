@@ -1,4 +1,4 @@
-﻿using ComplexTweaks.Features;
+using ComplexTweaks.Features;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
@@ -86,7 +86,7 @@ internal class FateTrackerUI(DateWithDestiny tweak) : Window($"Fate Tracker##{na
 
     private unsafe List<FateWrapper> GetFates()
     {
-        return Player.Territory switch
+        return Player.Territory.RowId switch
         {
             1237 => [.. WKSManager.Instance()->MechaEventModule->Events.ToArray().Select(x => new FateWrapper()
             {
